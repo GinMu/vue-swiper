@@ -39,6 +39,7 @@ export default {
       this.initActived = index
     },
     moveStart: function (e) {
+      e.preventDefault()
       this.start = e.changedTouches[0].pageX
     },
     moveEnd: function (e) {
