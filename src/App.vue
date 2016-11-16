@@ -1,6 +1,7 @@
 <template>
 <div id="app">
-  <swiper :swiper-list="list" :actived="actived"></swiper>
+  <label>循环: <input type="checkbox" name="DofB" v-model="cicle" style="width:30px;height:30px;"/></label>
+  <swiper :swiper-list="list" :actived="actived" :cicle="cicle"></swiper>
 </div>
 </template>
 
@@ -20,7 +21,8 @@ export default {
         src: 'http://www.sinaimg.cn/dy/slidenews/2_img/2016_46/61364_1990268_670581.jpg',
         alt: '贝克汉姆'
       }],
-      actived: 0
+      actived: 0,
+      cicle: false
     }
   },
   components: {
@@ -35,5 +37,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  font-size: 50px;
 }
 </style>
