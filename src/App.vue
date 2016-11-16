@@ -1,17 +1,30 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
-  </div>
+<div id="app">
+  <swiper :swiper-list="list" :actived="actived"></swiper>
+</div>
 </template>
 
 <script>
-import Hello from './components/Hello'
+import swiper from './components/swiper/swiper'
 
 export default {
-  name: 'app',
+  data () {
+    return {
+      list: [{
+        src: 'http://www.sinaimg.cn/dy/slidenews/2_img/2016_46/61364_1990254_843200.jpg',
+        alt: '足球'
+      }, {
+        src: 'http://www.sinaimg.cn/dy/slidenews/2_img/2016_46/61364_1990256_648981.jpg',
+        alt: '乔哈特'
+      }, {
+        src: 'http://www.sinaimg.cn/dy/slidenews/2_img/2016_46/61364_1990268_670581.jpg',
+        alt: '贝克汉姆'
+      }],
+      actived: 0
+    }
+  },
   components: {
-    Hello
+    swiper
   }
 }
 </script>
@@ -22,7 +35,5 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
