@@ -1,12 +1,13 @@
 <template lang="html">
   <div class="swiper-container">
-    <img :src="currentItem.src" :alt="currentItem.alt" @touchstart="moveStart" @touchend="moveEnd"/>
+    <img :src="currentItem.src" :alt="currentItem.alt" @touchstart.prevent="moveStart" @touchend="moveEnd"/>
     <div class="swiper-pagination">
       <span v-for="(value, index) in swiperList" class="swiper-dot" :class="{'active': index == initActived}" @click="switchImage(index)"></span>
     </div>
   </div>
 </template>
 <script>
+import { bus } from './event-bus'
 export default {
   data () {
     return {
@@ -26,7 +27,15 @@ export default {
     actived: {
       type: Number,
       default: 0
+    },
+    cicle: {
+      type: Boolean,
+      default: false
     }
+  },
+  created () {
+    bus.$on('swiperLeft', this.swiperLeft)
+    bus.$on('swiperRight', this.swiperRight)
   },
   computed: {
     currentItem: function () {
@@ -39,26 +48,25 @@ export default {
       this.initActived = index
     },
     moveStart: function (e) {
-      e.preventDefault()
       this.start = e.changedTouches[0].pageX
     },
     moveEnd: function (e) {
       this.end = e.changedTouches[0].pageX
       let distance = this.end - this.start
       if (distance > 20 && this.initActived > 0) {
-        this.initActived = this.initActived - 1
+        bus.$emit('swiperLeft')
         return
       }
 
       if (distance < -20 && this.initActived < this.swiperList.length - 1) {
-        this.initActived = this.initActived + 1
+        bus.$emit('swiperRight')
       }
     },
     swiperLeft: function () {
-
+      this.initActived = this.initActived - 1
     },
     swiperRight: function () {
-
+      this.initActived = this.initActived + 1
     }
   },
   components: {}
