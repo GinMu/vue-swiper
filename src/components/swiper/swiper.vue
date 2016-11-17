@@ -1,8 +1,8 @@
 <template lang="html">
   <div class="swiper-container">
-    <img :src="currentItem.src" :alt="currentItem.alt" @touchstart.prevent.stop="moveStart" @touchend.stop="moveEnd"/>
+    <img :src="currentItem.src" :alt="currentItem.alt" @touchstart.prevent.stop="touchStart" @touchend.stop="touchEnd"/>
     <div class="swiper-pagination">
-      <span v-for="(value, index) in swiperList" class="swiper-dot" :class="{'active': index == initActived}" @click="switchImage(index)"></span>
+      <span v-for="(value, index) in swiperList" class="swiper-dot" :class="{'active': index == initActived}"></span>
     </div>
   </div>
 </template>
@@ -48,18 +48,15 @@ export default {
   },
   mounted () {},
   methods: {
-    switchImage: function (index) {
-      this.initActived = index
-    },
-    moveStart: function (e) {
+    touchStart: function (e) {
       this.start = e.changedTouches[0].pageX
     },
-    moveEnd: function (e) {
+    touchEnd: function (e) {
       this.end = e.changedTouches[0].pageX
       let distance = this.end - this.start
-      if (distance > 20) {
+      if (distance > 30) {
         bus.$emit('swiperLeft', distance)
-      } else if (distance < -20) {
+      } else if (distance < -30) {
         bus.$emit('swiperRight', distance)
       }
     },
@@ -99,13 +96,13 @@ export default {
 
 .swiper-container .swiper-pagination {
   position: absolute;
-  bottom: 20px;
+  bottom: 10px;
   width: 100%;
 }
 
 .swiper-container .swiper-pagination .swiper-dot {
-  width: 20px;
-  height: 20px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background-color: #000;
   opacity: .3;

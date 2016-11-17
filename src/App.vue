@@ -1,6 +1,6 @@
 <template>
 <div id="app">
-  <label>循环: <input type="checkbox" name="DofB" v-model="cicle" style="width:30px;height:30px;"/></label>
+  <label>循环: <input type="checkbox" name="DofB" v-model="cicle" style="width:15px;height:15px;"/></label>
   <swiper :swiper-list="list" :actived="actived" :cicle="cicle"></swiper>
 </div>
 </template>
@@ -37,6 +37,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  font-size: 50px;
+  font-size: 20px;
 }
 </style>
