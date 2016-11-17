@@ -1,8 +1,14 @@
 <template lang="html">
-  <div class="swiper-container">
-    <img :style="transform" :src="currentItem.src" :alt="currentItem.alt" @touchstart.prevent.stop="touchStart" @touchend.stop="touchEnd" @touchmove="touchMove"/>
-    <div class="swiper-pagination">
-      <span v-for="(value, index) in swiperList" class="swiper-dot" :class="{'active': index == initActived}"></span>
+  <div class="vue-swiper" >
+    <div class="vue-swiper-group" @touchstart.stop="touchStart" @touchend.prevent.stop="touchEnd" @touchmove.prevent="touchMove" :style="transform">
+      <div class="vue-swiper-item" v-for="item in swiperList">
+        <a href="javascript:void(0);">
+          <img :src="item.src" :alt="item.alt">
+        </a>
+      </div>
+    </div>
+    <div class="vue-swiper-indicator">
+      <div v-for="(value, index) in swiperList" class="vue-indicator" :class="{'vue-active': index == initActived}"></div>
     </div>
   </div>
 </template>
@@ -50,7 +56,8 @@ export default {
     transform: function () {
       let value = 'translate3d(' + this.translate3d_X + 'px,' + this.translate3d_Y + 'px,0)'
       let translate3d = {
-        'transition-duration': '500ms'
+        'transition-duration': '300ms',
+        'transition-timing-function': 'linear'
       }
       translate3d.transform = value
       return translate3d
@@ -63,19 +70,22 @@ export default {
     },
     touchMove: function (e) {
       let move = e.changedTouches[0].pageX - this.start
-      this.translate3d_X = move
+      let x = this.initActived * e.target.clientWidth
+      this.translate3d_X = move - x
     },
     touchEnd: function (e) {
-      this.translate3d_X = 0
       this.end = e.changedTouches[0].pageX
       let distance = this.end - this.start
+      let clientWidth = e.target.clientWidth
       if (distance > 30) {
-        bus.$emit('swiperLeft', distance)
+        bus.$emit('swiperLeft', clientWidth)
       } else if (distance < -30) {
-        bus.$emit('swiperRight', distance)
+        bus.$emit('swiperRight', clientWidth)
+      } else {
+        this.translate3d_X = -this.initActived * clientWidth
       }
     },
-    swiperLeft: function () {
+    swiperLeft: function (width) {
       if (this.initActived > 0) {
         this.initActived = this.initActived - 1
       } else {
@@ -83,8 +93,9 @@ export default {
           this.initActived = this.swiperList.length - 1
         }
       }
+      this.translate3d_X = -this.initActived * width
     },
-    swiperRight: function () {
+    swiperRight: function (width) {
       if (this.initActived < this.swiperList.length - 1) {
         this.initActived = this.initActived + 1
       } else {
@@ -92,6 +103,7 @@ export default {
           this.initActived = 0
         }
       }
+      this.translate3d_X = -this.initActived * width
     }
   },
   components: {}
@@ -99,36 +111,66 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.swiper-container {
-  position: relative;
-  overflow: hidden;
-  transition: all 0ms ease;
+
+.vue-swiper {
+	position: relative;
+	z-index: 1;
+	overflow: hidden;
+	width: 100%;
 }
 
-.swiper-container img {
-  width: 100%;
-  max-height: 500px;
+.vue-swiper .vue-swiper-group {
+	font-size: 0;
+	position: relative;
+	-webkit-transition: all 0s linear;
+	transition: all 0s linear;
+	white-space: nowrap;
 }
 
-.swiper-container .swiper-pagination {
-  position: absolute;
-  bottom: 10px;
-  width: 100%;
+.vue-swiper .vue-swiper-group .vue-swiper-item {
+	font-size: 14px;
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	vertical-align: top;
+	white-space: normal;
 }
 
-.swiper-container .swiper-pagination .swiper-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: #000;
+.vue-swiper .vue-swiper-group .vue-swiper-item > a:not(.vue-control-item) {
+	line-height: 0;
+	position: relative;
+	display: block;
+}
+
+.vue-swiper .vue-swiper-group .vue-swiper-item img {
+	width: 100%;
+}
+
+.vue-swiper-indicator {
+	position: absolute;
+	bottom: 8px;
+	width: 100%;
+	text-align: center;
+	background: none;
+}
+
+.vue-swiper-indicator .vue-indicator {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	margin: 1px 6px;
+	cursor: pointer;
+	border-radius: 50%;
+	background: #fff;
   opacity: .3;
-  display: inline-block;
-  margin: 0 10px;
-  cursor: pointer;
+	-webkit-box-shadow: 0 0 1px 1px rgba(130, 130, 130, .7);
+	box-shadow: 0 0 1px 1px rgba(130, 130, 130, .7);
 }
 
-.swiper-container .swiper-pagination .swiper-dot.active {
-  background-color: #007aff;
+.vue-swiper-indicator .vue-active {
+	background: #007aff;
   opacity: 1;
 }
+
 </style>

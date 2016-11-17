@@ -21,7 +21,7 @@ export default {
         src: 'http://www.sinaimg.cn/dy/slidenews/2_img/2016_46/61364_1990268_670581.jpg',
         alt: '贝克汉姆'
       }],
-      actived: 1,
+      actived: 0,
       cicle: false
     }
   },
