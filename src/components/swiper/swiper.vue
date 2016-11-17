@@ -1,6 +1,6 @@
 <template lang="html">
-  <div class="vue-swiper" >
-    <div class="vue-swiper-group" @touchstart.stop="touchStart" @touchend.prevent.stop="touchEnd" @touchmove.prevent="touchMove" :style="transform">
+  <div class="vue-swiper" @touchstart.stop="touchStart" @touchend.prevent.stop="touchEnd" @touchmove.prevent="touchMove">
+    <div class="vue-swiper-group" :style="transform">
       <div class="vue-swiper-item" v-for="item in swiperList">
         <a href="javascript:void(0);">
           <img :src="item.src" :alt="item.alt">
