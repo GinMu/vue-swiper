@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="swiper-container">
-    <img :src="currentItem.src" :alt="currentItem.alt" @touchstart.prevent.stop="touchStart" @touchend.stop="touchEnd"/>
+    <img :style="transform" :src="currentItem.src" :alt="currentItem.alt" @touchstart.prevent.stop="touchStart" @touchend.stop="touchEnd" @touchmove="touchMove"/>
     <div class="swiper-pagination">
       <span v-for="(value, index) in swiperList" class="swiper-dot" :class="{'active': index == initActived}"></span>
     </div>
@@ -13,7 +13,9 @@ export default {
     return {
       initActived: this.actived,
       start: 0,
-      end: 0
+      end: 0,
+      translate3d_X: 0,
+      translate3d_Y: 0
     }
   },
   props: {
@@ -44,6 +46,14 @@ export default {
   computed: {
     currentItem: function () {
       return this.swiperList[this.initActived]
+    },
+    transform: function () {
+      let value = 'translate3d(' + this.translate3d_X + 'px,' + this.translate3d_Y + 'px,0)'
+      let translate3d = {
+        'transition-duration': '500ms'
+      }
+      translate3d.transform = value
+      return translate3d
     }
   },
   mounted () {},
@@ -51,7 +61,12 @@ export default {
     touchStart: function (e) {
       this.start = e.changedTouches[0].pageX
     },
+    touchMove: function (e) {
+      let move = e.changedTouches[0].pageX - this.start
+      this.translate3d_X = move
+    },
     touchEnd: function (e) {
+      this.translate3d_X = 0
       this.end = e.changedTouches[0].pageX
       let distance = this.end - this.start
       if (distance > 30) {
@@ -87,6 +102,7 @@ export default {
 .swiper-container {
   position: relative;
   overflow: hidden;
+  transition: all 0ms ease;
 }
 
 .swiper-container img {
