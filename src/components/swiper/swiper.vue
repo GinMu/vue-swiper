@@ -1,9 +1,9 @@
 <template lang="html">
   <div class="vue-swiper" @touchstart.prevent.stop="touchStart" @touchend.prevent.stop="touchEnd" @touchmove.prevent="touchMove">
     <div class="vue-swiper-group" :style="transform">
-      <div class="vue-swiper-item" v-for="item in swiperList">
+      <div class="vue-swiper-item" v-for="(item,index) in swiperList">
         <a href="javascript:void(0);">
-          <img :src="item.src" :alt="item.alt">
+          <img :src="loadingImage" :lazy-src="item.src" :alt="item.alt" @load="loaded(index,$event)">
         </a>
       </div>
     </div>
@@ -14,6 +14,7 @@
 </template>
 <script>
 import { bus } from './event-bus'
+import { gif } from './gif'
 export default {
   data () {
     return {
@@ -29,7 +30,8 @@ export default {
       MOVE_UP: 1,
       MOVE_DOWN: 2,
       MOVE_LEFT: 3,
-      MOVE_RIGHT: 4
+      MOVE_RIGHT: 4,
+      loadingImage: gif
     }
   },
   props: {
@@ -52,6 +54,7 @@ export default {
   created () {
     bus.$on('swiperLeft', this.swiperLeft)
     bus.$on('swiperRight', this.swiperRight)
+    bus.$on('lazyLoad', this._lazyLoad)
   },
   beforeDestroy () {
     bus.$off('swiperLeft', this.swiperLeft)
@@ -98,8 +101,12 @@ export default {
       }
     },
     swiperLeft: function (width) {
+      bus.$emit('lazyLoad')
       if (this.initActived < this.swiperList.length - 1) {
         this.initActived = this.initActived + 1
+        setTimeout(function () {
+          bus.$emit('lazyLoad')
+        }, 1000)
       } else {
         if (this.cicle) {
           this.initActived = 0
@@ -110,6 +117,9 @@ export default {
     swiperRight: function (width) {
       if (this.initActived > 0) {
         this.initActived = this.initActived - 1
+        setTimeout(function () {
+          bus.$emit('lazyLoad')
+        }, 1000)
       } else {
         if (this.cicle) {
           this.initActived = this.swiperList.length - 1
@@ -137,6 +147,24 @@ export default {
     },
     _getAngle: function (x, y) {
       return Math.atan2(y, x) * 180 / Math.PI
+    },
+    loaded: function (index, e) {
+      console.log(index)
+      if (index === this.initActived) {
+        let target = e.target
+        let currentSrc = target.src
+        let completed = target.complete
+        console.log(currentSrc)
+        if (currentSrc !== this.swiperList[index].src || !completed) {
+          let lazy = target.getAttribute('lazy-src')
+          console.log(lazy)
+          target.src = lazy
+        }
+      }
+    },
+    _lazyLoad: function () {
+      let images = document.getElementsByTagName('img')
+      images[this.initActived].src = this.swiperList[this.initActived].src
     }
   },
   components: {}
