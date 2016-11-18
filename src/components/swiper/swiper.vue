@@ -18,10 +18,17 @@ export default {
   data () {
     return {
       initActived: this.actived,
-      start: 0,
-      end: 0,
+      startX: 0,
+      endX: 0,
+      startY: 0,
+      endY: 0,
       translate3d_X: 0,
-      translate3d_Y: 0
+      translate3d_Y: 0,
+      NO_MOVE: 0,
+      MOVE_UP: 1,
+      MOVE_DOWN: 2,
+      MOVE_LEFT: 3,
+      MOVE_RIGHT: 4
     }
   },
   props: {
@@ -66,26 +73,38 @@ export default {
   mounted () {},
   methods: {
     touchStart: function (e) {
-      this.start = e.changedTouches[0].pageX
+      this.startX = e.changedTouches[0].pageX
+      this.startY = e.changedTouches[0].pageY
     },
     touchMove: function (e) {
-      let move = e.changedTouches[0].pageX - this.start
+      let move = e.changedTouches[0].pageX - this.startX
       let x = this.initActived * e.target.clientWidth
       this.translate3d_X = move - x
     },
     touchEnd: function (e) {
-      this.end = e.changedTouches[0].pageX
-      let distance = this.end - this.start
+      this.endX = e.changedTouches[0].pageX
+      this.endY = e.changedTouches[0].pageY
+      let swiperType = this._getDirection()
       let clientWidth = e.target.clientWidth
-      if (distance > 30) {
+      if (swiperType === this.MOVE_LEFT) {
         bus.$emit('swiperLeft', clientWidth)
-      } else if (distance < -30) {
+      } else if (swiperType === this.MOVE_RIGHT) {
         bus.$emit('swiperRight', clientWidth)
       } else {
         this.translate3d_X = -this.initActived * clientWidth
       }
     },
     swiperLeft: function (width) {
+      if (this.initActived < this.swiperList.length - 1) {
+        this.initActived = this.initActived + 1
+      } else {
+        if (this.cicle) {
+          this.initActived = 0
+        }
+      }
+      this.translate3d_X = -this.initActived * width
+    },
+    swiperRight: function (width) {
       if (this.initActived > 0) {
         this.initActived = this.initActived - 1
       } else {
@@ -95,15 +114,26 @@ export default {
       }
       this.translate3d_X = -this.initActived * width
     },
-    swiperRight: function (width) {
-      if (this.initActived < this.swiperList.length - 1) {
-        this.initActived = this.initActived + 1
-      } else {
-        if (this.cicle) {
-          this.initActived = 0
-        }
+    _getDirection: function () {
+      let moveX = this.endX - this.startX
+      let moveY = this.endY - this.startY
+      if (Math.abs(moveX) < 30 && Math.abs(moveY) < 30) {
+        return this.NO_MOVE
       }
-      this.translate3d_X = -this.initActived * width
+      let angle = this._getAngle(moveX, moveY)
+      if (angle > 135 && angle <= 180 || angle >= -180 && angle < -135) {
+        return this.MOVE_LEFT
+      }
+      if (angle >= -135 && angle <= -45) {
+        return this.MOVE_UP
+      }
+      if (angle >= 45 && angle <= 135) {
+        return this.MOVE_DOWN
+      }
+      return this.MOVE_RIGHT
+    },
+    _getAngle: function (x, y) {
+      return Math.atan2(y, x) * 180 / Math.PI
     }
   },
   components: {}
