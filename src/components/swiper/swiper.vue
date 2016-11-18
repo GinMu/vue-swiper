@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="vue-swiper" @touchstart.stop="touchStart" @touchend.prevent.stop="touchEnd" @touchmove.prevent="touchMove">
+  <div class="vue-swiper" @touchstart.prevent.stop="touchStart" @touchend.prevent.stop="touchEnd" @touchmove.prevent="touchMove">
     <div class="vue-swiper-group" :style="transform">
       <div class="vue-swiper-item" v-for="item in swiperList">
         <a href="javascript:void(0);">
@@ -22,6 +22,7 @@ export default {
       endX: 0,
       startY: 0,
       endY: 0,
+      distance: 50,
       translate3d_X: 0,
       translate3d_Y: 0,
       NO_MOVE: 0,
@@ -63,7 +64,7 @@ export default {
     transform: function () {
       let value = 'translate3d(' + this.translate3d_X + 'px,' + this.translate3d_Y + 'px,0)'
       let translate3d = {
-        'transition-duration': '300ms',
+        'transition-duration': '500ms',
         'transition-timing-function': 'linear'
       }
       translate3d.transform = value
@@ -78,8 +79,10 @@ export default {
     },
     touchMove: function (e) {
       let move = e.changedTouches[0].pageX - this.startX
-      let x = this.initActived * e.target.clientWidth
-      this.translate3d_X = move - x
+      if (Math.abs(move) > this.distance) {
+        let x = this.initActived * e.target.clientWidth
+        this.translate3d_X = move - x
+      }
     },
     touchEnd: function (e) {
       this.endX = e.changedTouches[0].pageX
@@ -117,7 +120,7 @@ export default {
     _getDirection: function () {
       let moveX = this.endX - this.startX
       let moveY = this.endY - this.startY
-      if (Math.abs(moveX) < 30 && Math.abs(moveY) < 30) {
+      if (Math.abs(moveX) < this.distance && Math.abs(moveY) < this.distance) {
         return this.NO_MOVE
       }
       let angle = this._getAngle(moveX, moveY)
