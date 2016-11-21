@@ -14,7 +14,7 @@
 </template>
 <script>
 import { bus } from './event-bus'
-import { gif } from './gif'
+import * as constant from './constant'
 export default {
   data () {
     return {
@@ -26,12 +26,7 @@ export default {
       distance: 50,
       translate3d_X: 0,
       translate3d_Y: 0,
-      NO_MOVE: 0,
-      MOVE_UP: 1,
-      MOVE_DOWN: 2,
-      MOVE_LEFT: 3,
-      MOVE_RIGHT: 4,
-      loadingImage: gif
+      loadingImage: constant.LOADING_IMAGE
     }
   },
   props: {
@@ -61,9 +56,6 @@ export default {
     bus.$off('swiperRight', this.swiperRight)
   },
   computed: {
-    currentItem: function () {
-      return this.swiperList[this.initActived]
-    },
     transform: function () {
       let value = 'translate3d(' + this.translate3d_X + 'px,' + this.translate3d_Y + 'px,0)'
       let translate3d = {
@@ -92,9 +84,9 @@ export default {
       this.endY = e.changedTouches[0].pageY
       let swiperType = this._getDirection()
       let clientWidth = e.target.clientWidth
-      if (swiperType === this.MOVE_LEFT) {
+      if (swiperType === constant.MOVE_LEFT) {
         bus.$emit('swiperLeft', clientWidth)
-      } else if (swiperType === this.MOVE_RIGHT) {
+      } else if (swiperType === constant.MOVE_RIGHT) {
         bus.$emit('swiperRight', clientWidth)
       } else {
         this.translate3d_X = -this.initActived * clientWidth
@@ -131,19 +123,19 @@ export default {
       let moveX = this.endX - this.startX
       let moveY = this.endY - this.startY
       if (Math.abs(moveX) < this.distance && Math.abs(moveY) < this.distance) {
-        return this.NO_MOVE
+        return constant.NO_MOVE
       }
       let angle = this._getAngle(moveX, moveY)
       if (angle > 135 && angle <= 180 || angle >= -180 && angle < -135) {
-        return this.MOVE_LEFT
+        return constant.MOVE_LEFT
       }
       if (angle >= -135 && angle <= -45) {
-        return this.MOVE_UP
+        return constant.MOVE_UP
       }
       if (angle >= 45 && angle <= 135) {
-        return this.MOVE_DOWN
+        return constant.MOVE_DOWN
       }
-      return this.MOVE_RIGHT
+      return constant.MOVE_RIGHT
     },
     _getAngle: function (x, y) {
       return Math.atan2(y, x) * 180 / Math.PI
