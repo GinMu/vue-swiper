@@ -150,21 +150,25 @@ export default {
     },
     loaded: function (index, e) {
       console.log(index)
-      if (index === this.initActived) {
+      let complete = this._lazyComplete(index, e)
+      if (index === this.initActived && complete) {
         let target = e.target
-        let currentSrc = target.src
-        let completed = target.complete
-        console.log(currentSrc)
-        if (currentSrc !== this.swiperList[index].src || !completed) {
-          let lazy = target.getAttribute('lazy-src')
-          console.log(lazy)
-          target.src = lazy
-        }
+        let lazy = target.getAttribute('lazy-src')
+        target.src = lazy
       }
     },
     _lazyLoad: function () {
       let images = document.getElementsByTagName('img')
       images[this.initActived].src = this.swiperList[this.initActived].src
+    },
+    _lazyComplete: function (index, e) {
+      let target = e.target
+      let currentSrc = target.src
+      let completed = target.complete
+      if (currentSrc !== this.swiperList[index].src || !completed) {
+        return true
+      }
+      return false
     }
   },
   components: {}
@@ -206,6 +210,25 @@ export default {
 
 .vue-swiper .vue-swiper-group .vue-swiper-item img {
 	width: 100%;
+  max-height: 190px;
+}
+
+@media (min-width: 321px) and (max-width: 375px) {
+  .vue-swiper .vue-swiper-group .vue-swiper-item img {
+    max-height: 225px;
+  }
+}
+
+@media (min-width: 376px) and (max-width: 414px) {
+  .vue-swiper .vue-swiper-group .vue-swiper-item img {
+    max-height: 250px;
+  }
+}
+
+@media (min-width: 768px) {
+  .vue-swiper .vue-swiper-group .vue-swiper-item img {
+    max-height: 471px;
+  }
 }
 
 .vue-swiper-indicator {
