@@ -8,7 +8,7 @@
         </a>
       </div>
     </div>
-    <div class="vue-swiper-indicator vue-text-right">
+    <div class="vue-swiper-indicator" :class="{'vue-text-right': indicatorRight}">
       <div v-for="(value, index) in swiperList" class="vue-indicator" :class="{'vue-active': index == actived}"></div>
     </div>
   </div>
@@ -39,6 +39,10 @@ export default {
       }
     },
     cicle: {
+      type: Boolean,
+      default: false
+    },
+    indicatorRight: {
       type: Boolean,
       default: false
     }

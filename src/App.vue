@@ -1,6 +1,6 @@
 <template>
 <div id="app">
-  <swiper :swiper-list="list" :cicle="cicle"></swiper>
+  <swiper :swiper-list="list" :cicle="cicle" :indicator-right="indicatorRight"></swiper>
 </div>
 </template>
 
@@ -23,7 +23,8 @@ export default {
         alt: '贝克汉姆',
         title: '贝克汉姆'
       }],
-      cicle: false
+      cicle: false,
+      indicatorRight: true
     }
   },
   components: {
