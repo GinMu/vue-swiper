@@ -4,10 +4,11 @@
       <div class="vue-swiper-item" v-for="(item,index) in swiperList">
         <a href="javascript:void(0);">
           <img :src="loadingImage" :lazy-src="item.src" :alt="item.alt" @load="loaded(index,$event)">
+          <p class="vue-swiper-title" v-text="item.title"></p>
         </a>
       </div>
     </div>
-    <div class="vue-swiper-indicator">
+    <div class="vue-swiper-indicator vue-text-right">
       <div v-for="(value, index) in swiperList" class="vue-indicator" :class="{'vue-active': index == actived}"></div>
     </div>
   </div>
@@ -233,7 +234,8 @@ export default {
 
 .vue-swiper-indicator {
 	position: absolute;
-	bottom: 8px;
+	bottom: 0;
+  height: 30px;
 	width: 100%;
 	text-align: center;
 	background: none;
@@ -243,7 +245,7 @@ export default {
 	display: inline-block;
 	width: 8px;
 	height: 8px;
-	margin: 1px 6px;
+  margin: 11px 6px;
 	cursor: pointer;
 	border-radius: 50%;
 	background: #fff;
@@ -255,6 +257,31 @@ export default {
 .vue-swiper-indicator .vue-active {
 	background: #007aff;
   opacity: 1;
+}
+
+.vue-swiper-title {
+  line-height: 30px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  margin: 0;
+  text-align: left;
+  text-indent: 12px;
+  opacity: .6;
+  background-color: #000;
+}
+
+p {
+  font-size: 14px;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.vue-text-right {
+  text-align: right!important;
 }
 
 </style>

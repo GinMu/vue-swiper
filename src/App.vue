@@ -1,6 +1,5 @@
 <template>
 <div id="app">
-  <label>循环: <input type="checkbox" name="DofB" v-model="cicle" style="width:15px;height:15px;"/></label>
   <swiper :swiper-list="list" :cicle="cicle"></swiper>
 </div>
 </template>
@@ -13,13 +12,16 @@ export default {
     return {
       list: [{
         src: 'http://www.sinaimg.cn/dy/slidenews/2_img/2016_46/61364_1990254_843200.jpg',
-        alt: '足球'
+        alt: '足球',
+        title: '足球'
       }, {
         src: 'http://www.sinaimg.cn/dy/slidenews/2_img/2016_46/61364_1990256_648981.jpg',
-        alt: '乔哈特'
+        alt: '乔哈特',
+        title: '乔哈特'
       }, {
         src: 'http://www.sinaimg.cn/dy/slidenews/2_img/2016_46/61364_1990268_670581.jpg',
-        alt: '贝克汉姆'
+        alt: '贝克汉姆',
+        title: '贝克汉姆'
       }],
       cicle: false
     }
