@@ -8,17 +8,18 @@
       </div>
     </div>
     <div class="vue-swiper-indicator">
-      <div v-for="(value, index) in swiperList" class="vue-indicator" :class="{'vue-active': index == initActived}"></div>
+      <div v-for="(value, index) in swiperList" class="vue-indicator" :class="{'vue-active': index == actived}"></div>
     </div>
   </div>
 </template>
 <script>
 import { bus } from './event-bus'
 import * as constant from './constant'
+let imgs = []
 export default {
   data () {
     return {
-      initActived: this.actived,
+      actived: 0,
       startX: 0,
       endX: 0,
       startY: 0,
@@ -36,10 +37,6 @@ export default {
       validator: function (value) {
         return value.length > 1
       }
-    },
-    actived: {
-      type: Number,
-      default: 0
     },
     cicle: {
       type: Boolean,
@@ -75,7 +72,7 @@ export default {
     touchMove: function (e) {
       let move = e.changedTouches[0].pageX - this.startX
       if (Math.abs(move) > this.distance) {
-        let x = this.initActived * e.target.clientWidth
+        let x = this.actived * e.target.clientWidth
         this.translate3d_X = move - x
       }
     },
@@ -89,35 +86,30 @@ export default {
       } else if (swiperType === constant.MOVE_RIGHT) {
         bus.$emit('swiperRight', clientWidth)
       } else {
-        this.translate3d_X = -this.initActived * clientWidth
+        this.translate3d_X = -this.actived * clientWidth
       }
     },
     swiperLeft: function (width) {
-      bus.$emit('lazyLoad')
-      if (this.initActived < this.swiperList.length - 1) {
-        this.initActived = this.initActived + 1
-        setTimeout(function () {
-          bus.$emit('lazyLoad')
-        }, 1000)
+      if (this.actived < this.swiperList.length - 1) {
+        this.actived = this.actived + 1
+        this._emitLazyLoad()
       } else {
         if (this.cicle) {
-          this.initActived = 0
+          this.actived = 0
         }
       }
-      this.translate3d_X = -this.initActived * width
+      this.translate3d_X = -this.actived * width
     },
     swiperRight: function (width) {
-      if (this.initActived > 0) {
-        this.initActived = this.initActived - 1
-        setTimeout(function () {
-          bus.$emit('lazyLoad')
-        }, 1000)
+      if (this.actived > 0) {
+        this.actived = this.actived - 1
+        this._emitLazyLoad()
       } else {
         if (this.cicle) {
-          this.initActived = this.swiperList.length - 1
+          this.actived = this.swiperList.length - 1
         }
       }
-      this.translate3d_X = -this.initActived * width
+      this.translate3d_X = -this.actived * width
     },
     _getDirection: function () {
       let moveX = this.endX - this.startX
@@ -141,26 +133,43 @@ export default {
       return Math.atan2(y, x) * 180 / Math.PI
     },
     loaded: function (index, e) {
-      console.log(index)
-      let complete = this._lazyComplete(index, e)
-      if (index === this.initActived && complete) {
+      let complete = this._lazyComplete(index, e.target)
+      if (index === this.actived && complete) {
         let target = e.target
         let lazy = target.getAttribute('lazy-src')
         target.src = lazy
       }
     },
     _lazyLoad: function () {
-      let images = document.getElementsByTagName('img')
-      images[this.initActived].src = this.swiperList[this.initActived].src
+      let images = this._getImgs()
+      images[this.actived].src = this.swiperList[this.actived].src
     },
-    _lazyComplete: function (index, e) {
-      let target = e.target
+    _lazyComplete: function (index, target) {
       let currentSrc = target.src
       let completed = target.complete
       if (currentSrc !== this.swiperList[index].src || !completed) {
         return true
       }
       return false
+    },
+    _getImgs: function () {
+      if (imgs.length === 0) {
+        let swiperItems = document.getElementsByClassName('vue-swiper-item')
+        for (let item of swiperItems) {
+          let img = item.getElementsByTagName('img')[0]
+          imgs.push(img)
+        }
+      }
+      return imgs
+    },
+    _emitLazyLoad: function () {
+      let imgs = this._getImgs()
+      let target = imgs[this.actived]
+      if (this._lazyComplete(this.actived, target)) {
+        setTimeout(function () {
+          bus.$emit('lazyLoad')
+        }, 1000)
+      }
     }
   },
   components: {}

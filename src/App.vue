@@ -1,7 +1,7 @@
 <template>
 <div id="app">
   <label>循环: <input type="checkbox" name="DofB" v-model="cicle" style="width:15px;height:15px;"/></label>
-  <swiper :swiper-list="list" :actived="actived" :cicle="cicle"></swiper>
+  <swiper :swiper-list="list" :cicle="cicle"></swiper>
 </div>
 </template>
 
@@ -21,7 +21,6 @@ export default {
         src: 'http://www.sinaimg.cn/dy/slidenews/2_img/2016_46/61364_1990268_670581.jpg',
         alt: '贝克汉姆'
       }],
-      actived: 0,
       cicle: false
     }
   },
