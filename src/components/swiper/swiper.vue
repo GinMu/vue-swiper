@@ -24,7 +24,6 @@ export default {
       endX: 0,
       startY: 0,
       endY: 0,
-      distance: 50,
       translate3d_X: 0,
       translate3d_Y: 0,
       loadingImage: constant.LOADING_IMAGE
@@ -71,7 +70,7 @@ export default {
     },
     touchMove: function (e) {
       let move = e.changedTouches[0].pageX - this.startX
-      if (Math.abs(move) > this.distance) {
+      if (Math.abs(move) > constant.MIN_DISTANCE) {
         let x = this.actived * e.target.clientWidth
         this.translate3d_X = move - x
       }
@@ -114,7 +113,7 @@ export default {
     _getDirection: function () {
       let moveX = this.endX - this.startX
       let moveY = this.endY - this.startY
-      if (Math.abs(moveX) < this.distance && Math.abs(moveY) < this.distance) {
+      if (Math.abs(moveX) < constant.MIN_DISTANCE && Math.abs(moveY) < constant.MIN_DISTANCE) {
         return constant.NO_MOVE
       }
       let angle = this._getAngle(moveX, moveY)

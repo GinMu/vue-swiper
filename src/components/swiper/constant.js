@@ -9,3 +9,5 @@ export const MOVE_DOWN = 2
 export const MOVE_LEFT = 3
 
 export const MOVE_RIGHT = 4
+
+export const MIN_DISTANCE = 50
