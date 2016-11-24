@@ -96,24 +96,24 @@ export default {
     swiperLeft: function (width) {
       if (this.actived < this.swiperList.length - 1) {
         this.actived = this.actived + 1
+        this.translate3d_X = -this.actived * width
         this._emitLazyLoad()
       } else {
         if (this.cicle) {
           this.actived = 0
         }
       }
-      this.translate3d_X = -this.actived * width
     },
     swiperRight: function (width) {
       if (this.actived > 0) {
         this.actived = this.actived - 1
+        this.translate3d_X = -this.actived * width
         this._emitLazyLoad()
       } else {
         if (this.cicle) {
           this.actived = this.swiperList.length - 1
         }
       }
-      this.translate3d_X = -this.actived * width
     },
     _getDirection: function () {
       let moveX = this.endX - this.startX
