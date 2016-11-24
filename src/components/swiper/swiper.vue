@@ -99,6 +99,7 @@ export default {
         this.translate3d_X = -this.actived * width
         this._emitLazyLoad()
       } else {
+        this.translate3d_X = -this.actived * width
         if (this.cicle) {
           this.actived = 0
         }
@@ -110,6 +111,7 @@ export default {
         this.translate3d_X = -this.actived * width
         this._emitLazyLoad()
       } else {
+        this.translate3d_X = -this.actived * width
         if (this.cicle) {
           this.actived = this.swiperList.length - 1
         }
@@ -215,24 +217,24 @@ export default {
 
 .vue-swiper .vue-swiper-group .vue-swiper-item img {
 	width: 100%;
-  max-height: 180px;
+  max-height: 162px;
 }
 
 @media (min-width: 321px) and (max-width: 375px) {
   .vue-swiper .vue-swiper-group .vue-swiper-item img {
-    max-height: 215px;
+    max-height: 192px;
   }
 }
 
 @media (min-width: 376px) and (max-width: 414px) {
   .vue-swiper .vue-swiper-group .vue-swiper-item img {
-    max-height: 240px;
+    max-height: 214px;
   }
 }
 
 @media (min-width: 768px) {
   .vue-swiper .vue-swiper-group .vue-swiper-item img {
-    max-height: 401px;
+    max-height: 360px;
   }
 }
 
