@@ -11,17 +11,17 @@ export default {
   data () {
     return {
       list: [{
-        src: 'http://www.sinaimg.cn/dy/slidenews/2_img/2016_46/61364_1990254_843200.jpg',
-        alt: '足球',
-        title: '足球'
+        src: './static/images/eagle.jpg',
+        alt: 'eagle',
+        title: 'eagle'
       }, {
-        src: 'http://www.sinaimg.cn/dy/slidenews/2_img/2016_46/61364_1990256_648981.jpg',
-        alt: '乔哈特',
-        title: '乔哈特'
+        src: './static/images/red_panda.jpg',
+        alt: 'red panda',
+        title: 'red panda'
       }, {
-        src: 'http://www.sinaimg.cn/dy/slidenews/2_img/2016_46/61364_1990268_670581.jpg',
-        alt: '贝克汉姆',
-        title: '贝克汉姆'
+        src: './static/images/white_bengal_tiger.jpg',
+        alt: 'white bengal tiger',
+        title: 'white bengal tiger'
       }],
       cicle: false,
       indicatorRight: true

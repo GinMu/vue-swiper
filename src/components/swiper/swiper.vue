@@ -215,24 +215,24 @@ export default {
 
 .vue-swiper .vue-swiper-group .vue-swiper-item img {
 	width: 100%;
-  max-height: 190px;
+  max-height: 180px;
 }
 
 @media (min-width: 321px) and (max-width: 375px) {
   .vue-swiper .vue-swiper-group .vue-swiper-item img {
-    max-height: 225px;
+    max-height: 215px;
   }
 }
 
 @media (min-width: 376px) and (max-width: 414px) {
   .vue-swiper .vue-swiper-group .vue-swiper-item img {
-    max-height: 250px;
+    max-height: 240px;
   }
 }
 
 @media (min-width: 768px) {
   .vue-swiper .vue-swiper-group .vue-swiper-item img {
-    max-height: 471px;
+    max-height: 401px;
   }
 }
 
