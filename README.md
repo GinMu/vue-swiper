@@ -1,5 +1,7 @@
 # vue-swiper
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/GinMu/vue-swiper.svg)](https://greenkeeper.io/)
+
 > swiper components based on vue.js 2.x
 > [demo](https://ginmu.github.io/vue-swiper)
 
